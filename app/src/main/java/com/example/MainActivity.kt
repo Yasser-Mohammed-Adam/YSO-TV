@@ -35,6 +35,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Start Foreground Service for background and screen-off playback
+        val serviceIntent = android.content.Intent(this, MediaForegroundService::class.java)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent)
+        } else {
+            startService(serviceIntent)
+        }
+
         val targetUrl = "https://global-tv-elite.ai.studio/"
 
         setContent {
