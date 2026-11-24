@@ -2,7 +2,9 @@ package com.example
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.net.http.SslError
 import android.os.Bundle
+import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -35,7 +37,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Start Foreground Service for background and screen-off playback
         val serviceIntent = android.content.Intent(this, MediaForegroundService::class.java)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent)
@@ -103,6 +104,14 @@ class MainActivity : ComponentActivity() {
                                                     hasError = true
                                                     isLoading = false
                                                 }
+                                            }
+
+                                            override fun onReceivedSslError(
+                                                view: WebView?,
+                                                handler: SslErrorHandler?,
+                                                error: SslError?
+                                            ) {
+                                                handler?.proceed()
                                             }
                                         }
                                         webViewRef = this
